@@ -32,14 +32,15 @@ public class ThreadServiceImpl implements ThreadService {
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
         Threads thread = new Threads();
-        thread.setCategory(dto.getTitle());
+        thread.setTitle(dto.getTitle()); // set title properly
         thread.setCreatedBy(author);
-        thread.setCategory(new Category(fetchedCat.getId())); // or fetch entity
+        thread.setCategory(new Category(fetchedCat.getId())); // use ID if constructing a minimal Category
         Threads saved = threadRepo.save(thread);
 
         dto.setId(saved.getId());
         return dto;
     }
+
 
     @Override
     public List<ThreadDto> getAllThreads() {

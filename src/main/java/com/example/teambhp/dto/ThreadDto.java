@@ -15,7 +15,7 @@ public class ThreadDto {
         this.id = id;
     }
 
-    public Category getTitle() {
+    public String getTitle() {
         return title;
     }
 

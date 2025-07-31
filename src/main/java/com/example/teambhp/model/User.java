@@ -39,11 +39,11 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public Set<Thread> getThreads() {
+    public Set<Threads> getThreads() {
         return threads;
     }
 
-    public void setThreads(Set<Thread> threads) {
+    public void setThreads(Set<Threads> threads) {
         this.threads = threads;
     }
 
@@ -55,7 +55,7 @@ public class User extends BaseEntity {
         this.posts = posts;
     }
 
-    public User(String username, String password, String email, Set<Thread> threads, Set<Post> posts) {
+    public User(String username, String password, String email, Set<Threads> threads, Set<Post> posts) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -64,7 +64,7 @@ public class User extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
-    private Set<Thread> threads;
+    private Set<Threads> threads;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private Set<com.example.teambhp.model.Post> posts;
