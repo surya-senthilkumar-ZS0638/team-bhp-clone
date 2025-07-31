@@ -5,6 +5,7 @@ import com.example.teambhp.dto.ThreadDto;
 import com.example.teambhp.model.Category;
 import com.example.teambhp.model.Threads;
 import com.example.teambhp.model.User;
+import com.example.teambhp.repository.CategoryRepository;
 import com.example.teambhp.repository.ThreadRepository;
 import com.example.teambhp.repository.UserRepository;
 import com.example.teambhp.service.CategoryService;
@@ -21,22 +22,25 @@ public class ThreadServiceImpl implements ThreadService {
     private final ThreadRepository threadRepo;
     private final UserRepository userRepo;
     private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional
     public ThreadDto createThread(ThreadDto dto) {
         User author = userRepo.findByUsername(dto.getCreatedByUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Fetch the actual Category entity (not just a DTO)
         CategoryDto catDto = dto.getCategory();
-        CategoryDto fetchedCat = categoryService.findByName(catDto.getName())
+        Category category = categoryRepository.findByName(catDto.getName())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
         Threads thread = new Threads();
-        thread.setTitle(dto.getTitle()); // set title properly
+        thread.setTitle(dto.getTitle());
         thread.setCreatedBy(author);
-        thread.setCategory(new Category(fetchedCat.getId())); // use ID if constructing a minimal Category
-        Threads saved = threadRepo.save(thread);
+        thread.setCategory(category); // ✅ Managed entity with proper ID
 
+        Threads saved = threadRepo.save(thread);
         dto.setId(saved.getId());
         return dto;
     }
